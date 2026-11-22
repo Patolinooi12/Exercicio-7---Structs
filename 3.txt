@@ -1,0 +1,58 @@
+#include <iostream>
+using namespace std;
+
+struct Funcionario {
+    int codigo;
+    char nome[50], cargo[50];
+    float salario, horas, liquido;
+};
+
+int main() {
+    Funcionario f[8];
+    int n, maior = 0;
+    float folha = 0;
+
+    cout << "Quantidade de funcionarios (1 a 8): ";
+    cin >> n;
+
+    if (n < 1 || n > 8) {
+        cout << "Quantidade invalida!\n";
+        return 0;
+    }
+
+    for (int i = 0; i < n; i++) {
+        cout << "\nCodigo: ";
+        cin >> f[i].codigo;
+        cout << "Nome: ";
+        cin >> ws;
+        cin.getline(f[i].nome, 50);
+        cout << "Cargo: ";
+        cin.getline(f[i].cargo, 50);
+        cout << "Salario base: ";
+        cin >> f[i].salario;
+        cout << "Horas extras: ";
+        cin >> f[i].horas;
+
+        if (f[i].salario < 0 || f[i].horas < 0) {
+            cout << "Valores invalidos!\n";
+            return 0;
+        }
+
+        float hora = f[i].salario / 160;
+        float bruto = f[i].salario + (hora * 1.5 * f[i].horas);
+        f[i].liquido = bruto - (bruto * 0.10);
+        folha += bruto;
+
+        if (f[i].liquido > f[maior].liquido) maior = i;
+    }
+
+    for (int i = 0; i < n; i++)
+        cout << f[i].nome << " - R$ "
+             << f[i].liquido << endl;
+
+    cout << "\nMaior salario: " << f[maior].nome;
+    cout << "\nValor: R$ " << f[maior].liquido;
+    cout << "\nCusto da folha: R$ " << folha << endl;
+
+    return 0;
+}

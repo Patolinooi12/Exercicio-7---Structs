@@ -1,0 +1,120 @@
+#include <iostream>
+using namespace std;
+
+struct Data {
+    int dia, mes, ano;
+};
+
+struct Paciente {
+    int codigo, quantidade;
+    char nome[50];
+};
+
+struct Consulta {
+    Paciente paciente;
+    Data data;
+    char descricao[100];
+};
+
+int main() {
+    Paciente p[15];
+    Consulta c[30];
+    int np = 0, nc = 0, op, cod, pos;
+
+    do {
+        cout << "\n1-Cadastrar paciente 2-Registrar consulta";
+        cout << "\n3-Pesquisar 4-Listar por data";
+        cout << "\n5-Contar consultas 6-Mais atendido 0-Sair\n";
+        cin >> op;
+
+        if (op == 1 && np < 15) {
+            cout << "Codigo: ";
+            cin >> cod;
+            pos = -1;
+
+            for (int i = 0; i < np; i++)
+                if (p[i].codigo == cod) pos = i;
+
+            if (pos != -1) cout << "Codigo repetido!\n";
+            else {
+                p[np].codigo = cod;
+                cout << "Nome: ";
+                cin >> ws;
+                cin.getline(p[np].nome, 50);
+                p[np].quantidade = 0;
+                np++;
+            }
+        }
+        else if (op == 2 && nc < 30) {
+            cout << "Codigo do paciente: ";
+            cin >> cod;
+            pos = -1;
+
+            for (int i = 0; i < np; i++)
+                if (p[i].codigo == cod) pos = i;
+
+            if (pos == -1) cout << "Nao encontrado!\n";
+            else {
+                c[nc].paciente = p[pos];
+                cout << "Dia mes ano: ";
+                cin >> c[nc].data.dia
+                    >> c[nc].data.mes
+                    >> c[nc].data.ano;
+                cout << "Descricao: ";
+                cin >> ws;
+                cin.getline(c[nc].descricao, 100);
+
+                p[pos].quantidade++;
+                nc++;
+                cout << "Consulta registrada!\n";
+            }
+        }
+        else if (op == 3) {
+            cout << "Codigo: ";
+            cin >> cod;
+            for (int i = 0; i < nc; i++)
+                if (c[i].paciente.codigo == cod)
+                    cout << c[i].paciente.nome << " - "
+                         << c[i].data.dia << "/"
+                         << c[i].data.mes << "/"
+                         << c[i].data.ano << " - "
+                         << c[i].descricao << endl;
+        }
+        else if (op == 4) {
+            int d, m, a;
+            cout << "Dia mes ano: ";
+            cin >> d >> m >> a;
+
+            for (int i = 0; i < nc; i++)
+                if (c[i].data.dia == d &&
+                    c[i].data.mes == m &&
+                    c[i].data.ano == a)
+                    cout << c[i].paciente.nome << " - "
+                         << c[i].descricao << endl;
+        }
+        else if (op == 5) {
+            for (int i = 0; i < np; i++)
+                cout << p[i].nome << ": "
+                     << p[i].quantidade << " consultas\n";
+        }
+        else if (op == 6) {
+            if (np > 0) {
+                int maior = 0;
+                for (int i = 1; i < np; i++)
+                    if (p[i].quantidade > p[maior].quantidade)
+                        maior = i;
+
+                cout << "Mais atendido: " << p[maior].nome;
+                cout << " - " << p[maior].quantidade
+                     << " consultas\n";
+            }
+            else cout << "Nenhum paciente cadastrado!\n";
+        }
+        else if (op == 1 || op == 2)
+            cout << "Limite atingido!\n";
+        else if (op != 0) cout << "Opcao invalida!\n";
+
+    } while (op != 0);
+
+    return 0;
+}

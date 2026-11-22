@@ -1,0 +1,99 @@
+#include <iostream>
+using namespace std;
+
+struct Produto {
+    int codigo;
+    char nome[50];
+    float preco;
+    int estoque;
+};
+
+void repor(Produto *p, int q) {
+    p->estoque += q;
+}
+
+void vender(Produto *p, int q) {
+    p->estoque -= q;
+}
+
+int main() {
+    Produto p[15];
+    int total = 0, op, cod, pos, q;
+
+    do {
+        cout << "\n1-Cadastrar 2-Listar 3-Repor";
+        cout << "\n4-Vender 5-Consultar 6-Valor total 0-Sair\n";
+        cin >> op;
+
+        if (op == 1 && total < 15) {
+            cout << "Codigo: ";
+            cin >> cod;
+            pos = -1;
+
+            for (int i = 0; i < total; i++)
+                if (p[i].codigo == cod) pos = i;
+
+            if (pos != -1) cout << "Codigo repetido!\n";
+            else {
+                p[total].codigo = cod;
+                cout << "Nome: ";
+                cin >> ws;
+                cin.getline(p[total].nome, 50);
+                cout << "Preco e estoque: ";
+                cin >> p[total].preco >> p[total].estoque;
+
+                if (p[total].preco < 0 || p[total].estoque < 0)
+                    cout << "Valores invalidos!\n";
+                else total++;
+            }
+        }
+        else if (op == 2) {
+            for (int i = 0; i < total; i++)
+                cout << p[i].codigo << " - " << p[i].nome
+                     << " R$ " << p[i].preco
+                     << " Estoque: " << p[i].estoque << endl;
+        }
+        else if (op >= 3 && op <= 5) {
+            cout << "Codigo: ";
+            cin >> cod;
+            pos = -1;
+
+            for (int i = 0; i < total; i++)
+                if (p[i].codigo == cod) pos = i;
+
+            if (pos == -1) cout << "Nao encontrado!\n";
+            else if (op == 5)
+                cout << p[pos].nome << " - R$ " << p[pos].preco
+                     << " - Estoque: " << p[pos].estoque << endl;
+            else {
+                cout << "Quantidade: ";
+                cin >> q;
+
+                if (q <= 0) cout << "Quantidade invalida!\n";
+                else if (op == 3) repor(&p[pos], q);
+                else if (q <= p[pos].estoque) vender(&p[pos], q);
+                else cout << "Estoque insuficiente!\n";
+            }
+        }
+        else if (op == 6) {
+            float soma = 0;
+            int maior = 0;
+
+            for (int i = 0; i < total; i++) {
+                float valor = p[i].preco * p[i].estoque;
+                soma += valor;
+                if (valor > p[maior].preco * p[maior].estoque)
+                    maior = i;
+            }
+
+            cout << "Valor total: R$ " << soma << endl;
+            if (total > 0)
+                cout << "Maior valor: " << p[maior].nome << endl;
+        }
+        else if (op == 1) cout << "Cadastro cheio!\n";
+        else if (op != 0) cout << "Opcao invalida!\n";
+
+    } while (op != 0);
+
+    return 0;
+}

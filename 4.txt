@@ -1,0 +1,105 @@
+#include <iostream>
+using namespace std;
+
+struct Produto {
+    int codigo, estoque;
+    char nome[50];
+    float preco, faturamento;
+};
+
+struct Venda {
+    Produto produto;
+    int quantidade;
+    float total;
+};
+
+int main() {
+    Produto p[10];
+    Venda v[20];
+    int np = 0, nv = 0, op, cod, pos, q;
+    float faturamento = 0;
+
+    do {
+        cout << "\n1-Cadastrar 2-Vender 3-Listar vendas";
+        cout << "\n4-Faturamento 0-Sair\n";
+        cin >> op;
+
+        if (op == 1 && np < 10) {
+            cout << "Codigo: ";
+            cin >> cod;
+            pos = -1;
+
+            for (int i = 0; i < np; i++)
+                if (p[i].codigo == cod) pos = i;
+
+            if (pos != -1) cout << "Codigo repetido!\n";
+            else {
+                p[np].codigo = cod;
+                cout << "Nome: ";
+                cin >> ws;
+                cin.getline(p[np].nome, 50);
+                cout << "Preco e estoque: ";
+                cin >> p[np].preco >> p[np].estoque;
+
+                if (p[np].preco < 0 || p[np].estoque < 0)
+                    cout << "Valores invalidos!\n";
+                else {
+                    p[np].faturamento = 0;
+                    np++;
+                }
+            }
+        }
+        else if (op == 2 && nv < 20) {
+            cout << "Codigo do produto: ";
+            cin >> cod;
+            pos = -1;
+
+            for (int i = 0; i < np; i++)
+                if (p[i].codigo == cod) pos = i;
+
+            if (pos == -1) cout << "Nao encontrado!\n";
+            else {
+                cout << "Quantidade: ";
+                cin >> q;
+
+                if (q > 0 && q <= p[pos].estoque) {
+                    v[nv].produto = p[pos];
+                    v[nv].quantidade = q;
+                    v[nv].total = q * p[pos].preco;
+
+                    p[pos].estoque -= q;
+                    p[pos].faturamento += v[nv].total;
+                    faturamento += v[nv].total;
+                    nv++;
+                    cout << "Venda realizada!\n";
+                }
+                else cout << "Quantidade invalida!\n";
+            }
+        }
+        else if (op == 3) {
+            for (int i = 0; i < nv; i++)
+                cout << v[i].produto.nome << " - "
+                     << v[i].quantidade << " - R$ "
+                     << v[i].total << endl;
+        }
+        else if (op == 4) {
+            cout << "Faturamento: R$ " << faturamento << endl;
+
+            if (nv > 0) {
+                int maior = 0;
+                for (int i = 1; i < np; i++)
+                    if (p[i].faturamento > p[maior].faturamento)
+                        maior = i;
+
+                cout << "Produto que mais faturou: "
+                     << p[maior].nome << endl;
+            }
+        }
+        else if (op == 1 || op == 2)
+            cout << "Limite atingido!\n";
+        else if (op != 0) cout << "Opcao invalida!\n";
+
+    } while (op != 0);
+
+    return 0;
+}

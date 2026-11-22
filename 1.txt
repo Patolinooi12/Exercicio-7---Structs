@@ -1,0 +1,55 @@
+#include <iostream>
+using namespace std;
+
+struct Aluno {
+    int matricula;
+    char nome[50];
+    float nota1, nota2, media;
+};
+
+float calcularMedia(float n1, float n2) {
+    return (n1 + n2) / 2;
+}
+
+int main() {
+    Aluno a[10];
+    float soma = 0;
+    int maior = 0, menor = 0, acima = 0;
+
+    for (int i = 0; i < 10; i++) {
+        cout << "\nMatricula: ";
+        cin >> a[i].matricula;
+        cout << "Nome: ";
+        cin >> ws;
+        cin.getline(a[i].nome, 50);
+        cout << "Nota 1 e nota 2: ";
+        cin >> a[i].nota1 >> a[i].nota2;
+
+        a[i].media = calcularMedia(a[i].nota1, a[i].nota2);
+        soma += a[i].media;
+
+        if (a[i].media > a[maior].media) maior = i;
+        if (a[i].media < a[menor].media) menor = i;
+    }
+
+    float geral = soma / 10;
+
+    for (int i = 0; i < 10; i++) {
+        cout << "\n" << a[i].nome;
+        cout << " - Media: " << a[i].media;
+
+        if (a[i].media >= 6)
+            cout << " - Aprovado\n";
+        else
+            cout << " - Reprovado\n";
+
+        if (a[i].media > geral) acima++;
+    }
+
+    cout << "\nMaior media: " << a[maior].nome;
+    cout << "\nMenor media: " << a[menor].nome;
+    cout << "\nMedia geral: " << geral;
+    cout << "\nAcima da media: " << acima << endl;
+
+    return 0;
+}
